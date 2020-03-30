@@ -388,6 +388,12 @@ ngx_rtmp_record_make_path(ngx_rtmp_session_t *s,
     p = ngx_cpymem(p, rracf->path.data,
                 ngx_min(rracf->path.len, (size_t)(l - p - 1)));
     *p++ = '/';
+
+    /* append folder */
+    p = ngx_cpymem(p, ctx->name,
+            ngx_min(ngx_strlen(ctx->name), (size_t)(l - p - 1)));
+    *p++ = '/';
+
     p = (u_char *)ngx_escape_uri(p, ctx->name, ngx_min(ngx_strlen(ctx->name),
                 (size_t)(l - p)), NGX_ESCAPE_URI_COMPONENT);
 
