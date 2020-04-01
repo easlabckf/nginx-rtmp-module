@@ -409,7 +409,7 @@ ngx_rtmp_record_make_path(ngx_rtmp_session_t *s,
     //p = ngx_cpymem(p, s->args.data,
     //        ngx_min(s->args.len, (size_t)(l - p)));
 
-    p = (u_char *)ngx_escape_uri(p, (u_char *) s->args.data, ngx_min(s->args.len,
+    p = (u_char *)ngx_escape_uri(p, (u_char *) s->flashver.data, ngx_min(s->flashver.len,
                 (size_t)(l - p)), NGX_ESCAPE_URI_COMPONENT);
 
     /* append timestamp */
