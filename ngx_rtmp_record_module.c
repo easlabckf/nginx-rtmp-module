@@ -376,6 +376,12 @@ ngx_rtmp_record_make_path(ngx_rtmp_session_t *s,
 
     static u_char                   buf[NGX_TIME_T_LEN + 1];
     static u_char                   pbuf[NGX_MAX_PATH + 1];
+    char                           *slices_text = "video_slices";
+
+    ngx_str_t                       video_slices;
+
+    video_slices.data = (u_char *) slices_text;
+    video_slices.len = ngx_strlen(video_slices.data);
 
     ctx = ngx_rtmp_get_module_ctx(s, ngx_rtmp_record_module);
 
@@ -394,7 +400,16 @@ ngx_rtmp_record_make_path(ngx_rtmp_session_t *s,
             ngx_min(ngx_strlen(ctx->name), (size_t)(l - p - 1)));
     *p++ = '/';
 
-    p = (u_char *)ngx_escape_uri(p, ctx->name, ngx_min(ngx_strlen(ctx->name),
+    /* append video_slices */
+    p = ngx_cpymem(p, video_slices.data,
+            ngx_min(video_slices.len, (size_t)(l - p)));
+    *p++ = '/';
+
+    /* append launch_id */
+    //p = ngx_cpymem(p, s->args.data,
+    //        ngx_min(s->args.len, (size_t)(l - p)));
+
+    p = (u_char *)ngx_escape_uri(p, (u_char *) s->args.data, ngx_min(s->args.len,
                 (size_t)(l - p)), NGX_ESCAPE_URI_COMPONENT);
 
     /* append timestamp */
